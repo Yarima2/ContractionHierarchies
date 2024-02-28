@@ -1,9 +1,6 @@
-﻿using ContractionHierarchies.Io;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ContractionHierarchies.CHAlgorithm;
+using ContractionHierarchies.GraphImpl;
+using ContractionHierarchies.Io;
 
 namespace ContractionHierarchies
 {
@@ -12,7 +9,9 @@ namespace ContractionHierarchies
 
         public static void Main(string[] args)
         {
-            GraphLoader.Load("germany.graph");
+            StreetGraph graph = GraphLoader.Load("germany_sw_50kv.graph");
+            ICHPreProcessor preProcessor = new SingleThreadCHPreProcessor();
+            preProcessor.PreProcess(new RandomContractionOrder(1), new StandardContractor(), graph);
         }
 
     }

@@ -1,7 +1,6 @@
 ﻿using ContractionHierarchies.GraphImpl;
 using System.Diagnostics;
 using System.Globalization;
-using System.Numerics;
 
 namespace ContractionHierarchies.Io
 {
