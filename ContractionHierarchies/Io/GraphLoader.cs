@@ -1,5 +1,4 @@
 ﻿using ContractionHierarchies.GraphImpl;
-using ContractionHierarchies.Utils;
 using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
