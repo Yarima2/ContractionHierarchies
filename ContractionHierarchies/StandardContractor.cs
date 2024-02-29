@@ -5,7 +5,7 @@ namespace ContractionHierarchies
 {
     class StandardContractor : IContractor
     {
-        public void Contract(StreetGraph graph, int contractionId, HashSet<int> unContracted)
+        public void Contract(StreetGraph graph, int contractionId, bool[] contracted)
         {
             throw new NotImplementedException();
         }

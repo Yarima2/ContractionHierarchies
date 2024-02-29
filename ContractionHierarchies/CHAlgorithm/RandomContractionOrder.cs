@@ -7,13 +7,20 @@ using System.Threading.Tasks;
 
 namespace ContractionHierarchies.CHAlgorithm
 {
+
+    /// <summary>
+    /// This is a basic contraction order for testing until the edge difference contraction order is implemented.
+    /// </summary>
     class RandomContractionOrder : IContractionOrder
     {
 
-        public Random rand;
+        private int[] contractionOrder;
 
-        public RandomContractionOrder(int? seed)
+        private int numContracted = 0;
+
+        public RandomContractionOrder(StreetGraph graph, int? seed = null)
         {
+            Random rand;
             if(seed != null){
                 rand = new Random(seed.Value);
             }
@@ -21,12 +28,13 @@ namespace ContractionHierarchies.CHAlgorithm
             {
                 rand = Random.Shared;
             }
+            contractionOrder = Enumerable.Range(0, graph.VertexCount).ToArray();
+            rand.Shuffle(contractionOrder);
         }
 
-        public int NextVertex(StreetGraph g, ISet<int> unContracted)
+        public int NextVertex(StreetGraph g, bool[] contracted)
         {
-            int index = rand.Next(unContracted.Count);
-            return unContracted.ElementAt(index);
+            return contractionOrder[numContracted++];
         }
     }
 }

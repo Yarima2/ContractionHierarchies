@@ -11,7 +11,7 @@ namespace ContractionHierarchies
         {
             StreetGraph graph = GraphLoader.Load("germany_sw_50kv.graph");
             ICHPreProcessor preProcessor = new SingleThreadCHPreProcessor();
-            preProcessor.PreProcess(new RandomContractionOrder(1), new StandardContractor(), graph);
+            preProcessor.PreProcess(new RandomContractionOrder(graph, 1), new StandardContractor(), graph);
         }
 
     }

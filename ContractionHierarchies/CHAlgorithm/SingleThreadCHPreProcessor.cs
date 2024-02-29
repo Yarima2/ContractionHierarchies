@@ -16,12 +16,12 @@ namespace ContractionHierarchies.CHAlgorithm
         public void PreProcess(IContractionOrder contractionOrder, IContractor contractor, StreetGraph graph)
         {
             if (IsPreProcessingDone) return;
-            HashSet<int> unContracted = Enumerable.Range(0, graph.VertexCount).ToHashSet();
-            while(unContracted.Count > 0)
+            bool[] contracted = new bool[graph.VertexCount];
+            for(int i = 0; i < graph.VertexCount; i++)
             {
-                int contractionId = contractionOrder.NextVertex(graph, unContracted);
-                contractor.Contract(graph, contractionId, unContracted);
-                unContracted.Remove(contractionId);
+                int contractionId = contractionOrder.NextVertex(graph, contracted);
+                contractor.Contract(graph, contractionId, contracted);
+                contracted[contractionId] = true;
             }
             IsPreProcessingDone = true;
         }

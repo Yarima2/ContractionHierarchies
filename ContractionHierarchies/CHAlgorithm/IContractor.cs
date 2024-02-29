@@ -4,6 +4,6 @@ namespace ContractionHierarchies.CHAlgorithm
 {
     interface IContractor
     {
-        void Contract(StreetGraph graph, int contractionId, HashSet<int> unContracted);
+        void Contract(StreetGraph graph, int contractionId, bool[] contracted);
     }
 }

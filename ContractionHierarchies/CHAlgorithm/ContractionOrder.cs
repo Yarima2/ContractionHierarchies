@@ -4,6 +4,6 @@ namespace ContractionHierarchies.CHAlgorithm
 {
     interface IContractionOrder
     {
-        int NextVertex(StreetGraph g, ISet<int> unContracted);
+        int NextVertex(StreetGraph g, bool[] contracted);
     }
 }
