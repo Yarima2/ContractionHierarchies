@@ -1,9 +1,4 @@
 ﻿using ContractionHierarchies.GraphImpl;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContractionHierarchies.CHAlgorithm
 {
@@ -14,9 +9,9 @@ namespace ContractionHierarchies.CHAlgorithm
     class RandomContractionOrder : IContractionOrder
     {
 
-        private int[] contractionOrder;
-
         private int numContracted = 0;
+
+        public ContractionOrder ContractionOrder { get; private set; }
 
         public RandomContractionOrder(StreetGraph graph, int? seed = null)
         {
@@ -28,13 +23,13 @@ namespace ContractionHierarchies.CHAlgorithm
             {
                 rand = Random.Shared;
             }
-            contractionOrder = Enumerable.Range(0, graph.VertexCount).ToArray();
-            rand.Shuffle(contractionOrder);
+            ContractionOrder = Enumerable.Range(0, graph.VertexCount).ToArray();
+            rand.Shuffle(ContractionOrder);
         }
 
         public int NextVertex(StreetGraph g, bool[] contracted)
         {
-            return contractionOrder[numContracted++];
+            return ContractionOrder[numContracted++];
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using ContractionHierarchies.GraphImpl;
+﻿global using ContractionOrder = int[];
+using ContractionHierarchies.GraphImpl;
 
 namespace ContractionHierarchies.CHAlgorithm
 {
     interface ICHPreProcessor
     {
-        void PreProcess(IContractionOrder contractionOrder, IContractor contractor, StreetGraph graph);
+        ContractionOrder PreProcess(IContractionOrder contractionOrder, IContractor contractor, StreetGraph graph);
     }
 }

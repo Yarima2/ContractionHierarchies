@@ -11,10 +11,10 @@ namespace ContractionHierarchies.Io
 
         const char done = '■';
         const char empty = '_';
-        const int progressBarSize = 0;
+        const int progressBarSize = 50;
         const float minProgressIncrement = 0.005f;
 
-        private float lastProgress = 0f;
+        private DateTime lastProgress = DateTime.MinValue;
         private int lastLineLength;
 
         public ConsoleProgressBar()
@@ -24,7 +24,7 @@ namespace ContractionHierarchies.Io
 
         public void ReportProgress(float progress)
         {
-            if (Math.Abs(progress - lastProgress) > minProgressIncrement)
+            if (DateTime.Now - lastProgress > TimeSpan.FromMilliseconds(100) || progress == 1)
             {
                 DeleteProgress();
                 WriteProgress(progress);
@@ -33,9 +33,19 @@ namespace ContractionHierarchies.Io
 
         private void WriteProgress(float progress)
         {
-
+            lastProgress = DateTime.Now;
             Console.Write("[");
-            lastProgress = progress;
+            for (int i = 0; i < progressBarSize; i++)
+            {
+                if ((float) i / progressBarSize < progress)
+                {
+                    Console.Write(done);
+                }
+                else
+                {
+                    Console.Write(empty);
+                }
+            }
             string percentString = (progress * 100).ToString("0.00");
             Console.Write("] " + percentString + "%");
             lastLineLength = progressBarSize + percentString.Length + 4;
@@ -45,7 +55,7 @@ namespace ContractionHierarchies.Io
         {
             for (int i = 0; i < lastLineLength; i++)
             {
-                Console.WriteLine("\b");
+                Console.Write("\b");
             }
         }
     }
