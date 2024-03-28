@@ -1,4 +1,5 @@
-﻿using ContractionHierarchies.GraphImpl;
+﻿using ContractionHierarchies.CHAlgorithm;
+using ContractionHierarchies.GraphImpl;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,18 +15,20 @@ namespace ContractionHierarchies.LocalRouting
 
         private readonly StreetGraph _graph;
         private readonly bool[] _blocked;
+        private readonly ReaderWriterLock[]? _locks;
 
         private int _startId;
         private readonly HashSet<int> _visited = [];
         private readonly Dictionary<int, float> _distances = [];
         private readonly Dictionary<int, int> _predecessors = [];
 
-        public DijkstraLocalRoutingAlgorithm(StreetGraph graph, bool[] blocked)
+        public DijkstraLocalRoutingAlgorithm(StreetGraph graph, bool[] blocked, ReaderWriterLock[]? locks = null)
         {
             ArgumentNullException.ThrowIfNull(graph);
             ArgumentNullException.ThrowIfNull(blocked);
             _graph = graph;
             _blocked = blocked;
+            _locks = locks;
         }
 
 
@@ -48,6 +51,10 @@ namespace ContractionHierarchies.LocalRouting
                     {
                         return;
                     }
+                    if (_locks != null && !_locks[vertIndex].IsWriterLockHeld)
+                    {
+                        _locks?[vertIndex].AcquireReaderLock(MultiThreadCHPreProcessor.LockTimeout);
+                    }
                     foreach (EdgeTo neighbour in _graph.EdgesFrom(vertIndex))
                     {
                         if (!_visited.Contains(neighbour.TargetId))
@@ -55,7 +62,19 @@ namespace ContractionHierarchies.LocalRouting
                             DistanceUpdate(vertIndex, neighbour.TargetId, neighbour.Cost, queue);
                         }
                     }
+                    if (_locks != null && _locks[vertIndex].IsReaderLockHeld)
+                    {
+                        _locks?[vertIndex].ReleaseReaderLock();
+                    }
                 }
+                if(_visited.Count > 500)
+                {
+                   throw new Exception("Dijkstra too large");
+                }
+            }
+            if(targetIds.Count > 0)
+            {
+                throw new ArgumentException("Some targets were not reachable from the startId");
             }
         }
 
@@ -102,9 +121,9 @@ namespace ContractionHierarchies.LocalRouting
 
     public class DijkstraLocalRoutingAlgorithmFactory : ILocalRoutingAlgorithmFactory
     {
-        ILocalRoutingAlgorithm ILocalRoutingAlgorithmFactory.Create(StreetGraph graph, bool[] blocked)
+        ILocalRoutingAlgorithm ILocalRoutingAlgorithmFactory.Create(StreetGraph graph, bool[] blocked, ReaderWriterLock[]? locks)
         {
-            return new DijkstraLocalRoutingAlgorithm(graph, blocked);
+            return new DijkstraLocalRoutingAlgorithm(graph, blocked, locks);
         }
     }
 }

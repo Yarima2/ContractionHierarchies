@@ -64,13 +64,16 @@ namespace ContractionHierarchies.Io
                 int srcIndex = int.Parse(splitLine[0]);
                 int destIndex = int.Parse(splitLine[1]);
                 float cost = float.Parse(splitLine[2], NumberStyles.Any, Culture);
-                lock (edges[srcIndex])
+                if (srcIndex != destIndex)
                 {
-                    edges[srcIndex].Add(new EdgeTo(destIndex, cost));
-                }
-                lock (edges[destIndex])
-                {
-                    edges[destIndex].Add(new EdgeTo(srcIndex, cost));
+                    lock (edges[srcIndex])
+                    {
+                        edges[srcIndex].Add(new EdgeTo(destIndex, cost));
+                    }
+                    lock (edges[destIndex])
+                    {
+                        edges[destIndex].Add(new EdgeTo(srcIndex, cost));
+                    }
                 }
             });
             Console.WriteLine($"Loaded graph with {vertexCount} vertices and {edgeCount} edges");

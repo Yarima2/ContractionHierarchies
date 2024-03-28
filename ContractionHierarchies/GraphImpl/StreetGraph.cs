@@ -26,6 +26,32 @@ namespace ContractionHierarchies.GraphImpl
     }
 
     /// <summary>
+    /// This struct describes an edge.
+    /// </summary>
+    /// <param name="startVertexId"> The id of the vertex the edge originates from. </param>
+    /// <param name="targetVertexId"> The Id of the vertex the edge points to. </param>
+    /// <param name="cost"> The edge cost. </param>
+    public struct FullEdge(int startVertexId, int targetVertexId, float cost)
+    {
+
+        /// <summary>
+        /// The id of the vertex the edge originates from.
+        /// </summary>
+        public int StartId { get; set; } = startVertexId;
+
+        /// <summary>
+        /// The Id of the vertex the edge points to.
+        /// </summary>
+        public int TargetId { get; set; } = targetVertexId;
+
+        /// <summary>
+        /// The edge cost.
+        /// </summary>
+        public float Cost { get; set; } = cost;
+
+    }
+
+    /// <summary>
     /// An implementation of a directed weighted graph with an given embedding. Its intended use is as a street graph or other sparse graphs.
     /// </summary>
     public class StreetGraph

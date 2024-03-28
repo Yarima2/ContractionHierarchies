@@ -4,6 +4,6 @@ namespace ContractionHierarchies.LocalRouting
 {
     interface ILocalRoutingAlgorithmFactory
     {
-        ILocalRoutingAlgorithm Create(StreetGraph graph, bool[] blocked);
+        ILocalRoutingAlgorithm Create(StreetGraph graph, bool[] blocked, ReaderWriterLock[]? locks);
     }
 }
